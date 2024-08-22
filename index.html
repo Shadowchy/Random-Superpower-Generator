@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Superpower Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Random Superpower Generator</h1>
+        
+        {% if power %}
+            <p><strong>Power:</strong> {{ power['name'] }}</p>
+            <p><strong>Description:</strong> {{ power['description'] }}</p>
+            <form action="{{ url_for('save_power') }}" method="post">
+                <input type="hidden" name="power_id" value="{{ power['id'] }}">
+                <button type="submit">Save Power</button>
+            </form>
+        {% else %}
+            <p>No power available.</p>
+        {% endif %}
+        
+        <form action="{{ url_for('get_power') }}" method="post">
+            <button type="submit">Get Another Power</button>
+        </form>
+
+        {% if saved_powers %}
+            <h2>Saved Powers</h2>
+            <ul>
+                {% for saved_power in saved_powers %}
+                    <li>
+                        <strong>{{ saved_power['name'] }}</strong> - {{ saved_power['description'] }}
+                        <form action="{{ url_for('delete_power', power_id=saved_power['id']) }}" method="post" style="display:inline;">
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
